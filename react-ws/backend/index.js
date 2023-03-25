@@ -28,10 +28,7 @@ function onConnection(socket) {
 
   socket.on("disconnect", () => {
     const uname = [...lobbies["lobby"].filter(e => e.id === socket.id)][0].name
-    console.log(lobbies["lobby"])
     lobbies["lobby"] = [...lobbies["lobby"].filter(e => e.id !== socket.id)]
-    console.log(lobbies["lobby"])
-    console.log(uname)
     socket.to("lobby").emit("user-left", {username: uname})
   })
   
