@@ -28,13 +28,7 @@ io.on('connection', (socket) => {
   });
 
   socket.on("disconnect", () => {
-<<<<<<< HEAD
-    const uname = [...lobbies["lobby"].filter(e => e.id === socket.id)][0].name
-    lobbies["lobby"] = [...lobbies["lobby"].filter(e => e.id !== socket.id)]
-    socket.to("lobby").emit("user-left", {username: uname})
-=======
     socket.to("lobby").emit("user-left", {username: socket.data.username})
->>>>>>> 0ebfa5d (Added page files and refactored backend)
   })
   
 })
