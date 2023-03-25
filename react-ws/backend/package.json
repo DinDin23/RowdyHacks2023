@@ -8,6 +8,7 @@
     "whiteboard"
   ],
   "dependencies": {
+    "@react-oauth/google": "^0.9.0",
     "dotenv": "^16.0.3",
     "express": "~4.17.1",
     "mongoose": "^7.0.3",
