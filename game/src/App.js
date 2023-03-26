@@ -1,23 +1,15 @@
-import logo from './logo.svg';
-import './App.css';
+import React, {useState, useEffect} from 'react';
+import { Canvas, } from '@react-three/fiber'
+import TorusMesh from './TorusMesh';
 
 function App() {
+  const camPos = [19, -5, 6] 
+  const camRot = [1.6, 0, 0] 
+
+
   return (
-    <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
-        <p>
-          Edit <code>src/App.js</code> and save to reload.
-        </p>
-        <a
-          className="App-link"
-          href="https://reactjs.org"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Learn React
-        </a>
-      </header>
+    <div id="canvas-container" style={{ width: "100vw", height: "100vh" }}>
+      <TorusMesh/>
     </div>
   );
 }
