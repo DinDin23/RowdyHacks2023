@@ -66,7 +66,7 @@ function App() {
   }
 
   function leaveLobby() {
-    socket.emit("leave-lobby", {lobby: currentLobby})
+    socket.emit("leave-lobby", {lobby: currentLobby, username: username})
     setPage("lobbyselector")
   }
 
