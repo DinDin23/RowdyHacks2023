@@ -26,16 +26,23 @@ io.on('connection', (socket) => {
     const sockets = await io.in(data.lobby).fetchSockets();
     socket.emit("existing-users", {list: sockets.map(e => e.data.username)})
     console.log(rooms)
-    console.log(sids)
   });
 
-  socket.on('get-all-lobbies', () => {
-    console.log(rooms)
-    socket.emit("lobby-info", {list: [...rooms.keys()]})
+  socket.on('leave-lobby', (data) => {
+    socket.to(data.lobby).emit('user-left', {username: data.username})
+    socket.leave(data.lobby)
+  })
+
+  socket.on('get-all-lobbies', async () => {
+    const sockets = await io.fetchSockets();
+    const socketIDs = [...sockets].map(e => e.id)
+    socket.emit("lobby-info", {list: [...rooms.keys()].filter(e => !socketIDs.includes(e))})
   })
 
   socket.on("disconnect", () => {
-    socket.to("lobby").emit("user-left", {username: socket.data.username})
+    for (const room in [...[...socket.rooms].filter(e => e !== socket.id)]) {
+      socket.to(room).emit("user-left", {username: socket.data.username})
+    }
   })
 
   

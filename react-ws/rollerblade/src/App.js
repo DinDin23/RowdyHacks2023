@@ -19,6 +19,7 @@ function App() {
   const [lobbyUsers, setLobbyUsers] = useState([])
   const [username, setUsername] = useState("")
   const [page, setPage] = useState("login")
+  const [currentLobby, setCurrentLobby] = useState("")
 
 
   useEffect(() => {
@@ -29,7 +30,7 @@ function App() {
     }
 
     function handleExistingUsers(data) {
-      setLobbyUsers(prev => [...prev, ...data.list])
+      setLobbyUsers(prev => [...data.list])
     }
 
     function handleUserLeft(data) {
@@ -61,13 +62,19 @@ function App() {
 
   function joinLobby(lobby) {
     socket.emit("join-lobby", {lobby: lobby, username: username})
+    setCurrentLobby(lobby)
+  }
+
+  function leaveLobby() {
+    socket.emit("leave-lobby", {lobby: currentLobby})
+    setPage("lobbyselector")
   }
 
   return (
     <div className="App">
       {page === "login" ? <Login setUsername={setUsername} fetchLobbies={fetchLobbies} setPage={setPage}/>
        : page === "lobbyselector" ? <LobbySelector joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
-       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage}/>
+       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage} leaveLobby={leaveLobby}/>
        : page === "game" ? <Game/>
        : page === "postgame" ? <PostGame/>
        : <div/>

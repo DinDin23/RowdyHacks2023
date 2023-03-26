@@ -13,7 +13,7 @@ export default function Login(props) {
 
   const logOut = () => {
     googleLogout();
-    setProfile(null);
+    setProfile({name: "", email: "", picture: null});
   };
 
   useEffect(
@@ -43,7 +43,7 @@ export default function Login(props) {
 
 
   return (
-    <div>
+    <div className="flexColumn">
       <input style={{width: 500}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
       <button onClick={seeLobbies}>See Lobbies</button>
       <h2>Google Login</h2>
