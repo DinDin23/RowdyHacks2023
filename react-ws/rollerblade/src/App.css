@@ -2,7 +2,7 @@
   text-align: center;
   background: url("./newbg.jpeg");
   background-repeat: no-repeat;
-  background-size: 125vw;
+  background-size: 100vw 100vh;
   background-position: center;
   height: 100vh;
   display: flex;
