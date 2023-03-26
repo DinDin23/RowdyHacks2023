@@ -59,6 +59,8 @@ export default function Game(props) {
       <Canvas camera={{fov: 75, near: 0.1, far: 1000, position: [20, -5, 2.5], rotation: camRot}}>
         <CanvasContents 
           aDown={aDown} wDown={wDown} dDown={dDown} sDown={sDown}
+          otherPlayers={props.otherPlayers}
+          sendCoords={props.sendCoords}
         />
       </Canvas>
     </div>

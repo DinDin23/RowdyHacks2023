@@ -20,6 +20,7 @@ function App() {
   const [username, setUsername] = useState("")
   const [page, setPage] = useState("login")
   const [currentLobby, setCurrentLobby] = useState("")
+  const [otherPlayers, setOtherPlayers] = useState([])
 
 
   useEffect(() => {
@@ -41,8 +42,21 @@ function App() {
       setLobbies(data.list)
     }
 
-    function handleGameStarted() {
+    function handleGameStarted(data) {
+      setOtherPlayers([...data.players.map(e => ({username: e}))])
       setPage("game")
+    }
+
+    function handleCoordsUpdate(data) {
+      setOtherPlayers(prev => {
+        const index = prev.findIndex(e => e.username === data.username)
+        if (index > -1) {
+          let newArr = [...prev]
+          newArr[index] = {...data}
+          return newArr
+        }
+        return prev
+      })
     }
 
     socket.on("joined-lobby", handleOtherUser)
@@ -50,6 +64,7 @@ function App() {
     socket.on("user-left", handleUserLeft)
     socket.on("lobby-info", handleLobbyList)
     socket.on("game-started", handleGameStarted)
+    socket.on("coords-update", handleCoordsUpdate)
 
 
     return () => {
@@ -59,6 +74,7 @@ function App() {
       socket.off("user-left", handleUserLeft)
       socket.off("lobby-info", handleLobbyList)
       socket.off("game-started", handleGameStarted)
+      socket.off("coords-update", handleCoordsUpdate)
     }
   }, [])
 
@@ -77,12 +93,13 @@ function App() {
   }
 
   function startGame() {
-    socket.emit("start-game", {lobby: currentLobby})
+    socket.emit("start-game", {lobby: currentLobby, players: [...lobbyUsers]})
+    setOtherPlayers([...lobbyUsers.map(e => ({username: e}))])
     setPage("game")
   }
 
   function sendCoords(x, y, orientation, velocity) {
-    socket.emit("post-coords", {username: username, x, y, orientation, velocity})
+    socket.emit("post-coords", {lobby: currentLobby, username, x, y, orientation, velocity})
   }
 
   return (
@@ -90,7 +107,7 @@ function App() {
       {page === "login" ? <Login setUsername={setUsername} fetchLobbies={fetchLobbies} setPage={setPage}/>
        : page === "lobbyselector" ? <LobbySelector fetchLobbies={fetchLobbies} joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
        :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage} leaveLobby={leaveLobby} startGame={startGame}/>
-       : page === "game" ? <Game sendCoords={sendCoords}/>
+       : page === "game" ? <Game sendCoords={sendCoords} otherPlayers={[...otherPlayers.filter(e => e.username !== username)]}/>
        : page === "postgame" ? <PostGame/>
        : <div/>
       }

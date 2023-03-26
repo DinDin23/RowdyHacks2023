@@ -1,7 +1,8 @@
-import React, {useRef, useState} from 'react'
+import React, {useRef, useState, useEffect} from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 
 export default function CanvasContents(props) {
+  const conesRef = useRef([])
   const myMesh = useRef();
   const camera = useThree((state) => state.camera);
   const [coneOrientation, setConeOrientation] = useState(0)
@@ -33,7 +34,6 @@ export default function CanvasContents(props) {
     setConeVel(newConeVel)
     setConeOrientation(newConeOrientation)
 
-    console.log(`delta x: ${newConeVel*Math.cos(newConeOrientation + Math.PI/2)}`)
     myMesh.current.position.x += newConeVel*Math.cos(newConeOrientation + Math.PI/2)
     myMesh.current.position.y += newConeVel*Math.sin(newConeOrientation + Math.PI/2)
 
@@ -42,13 +42,19 @@ export default function CanvasContents(props) {
     camera.position.y = myMesh.current.position.y - 5*Math.sin(newConeOrientation + Math.PI/2)
     camera.rotation.y = newConeOrientation
 
-
-
-
-    console.log(myMesh.current.position)
-
-
+    props.sendCoords(myMesh.current.position.x, myMesh.current.position.y, newConeOrientation, newConeVel)
   })
+
+  useEffect(() => {
+    conesRef.current = conesRef.current.slice(0, props.otherPlayers.length);
+    for (let i = 0; i < props.otherPlayers.length; i++) {
+      if (props.otherPlayers[i].x && props.otherPlayers[i].y) {
+        conesRef.current[i].position.x = props.otherPlayers[i].x
+        conesRef.current[i].position.y = props.otherPlayers[i].y
+      }
+    }
+  }, [props.otherPlayers]);
+
   return (
     <>
       <mesh>
@@ -60,10 +66,20 @@ export default function CanvasContents(props) {
         <torusGeometry args={[20, 1, 2, 100]} />
         <meshBasicMaterial color={"#ff0000"} />
       </mesh>
+      
       <mesh ref={myMesh} position={[20, 0, 2.5]} rotation={[1.6, 0, 0]}>
         <coneGeometry args={[1, 5, 32]}/>
         <meshBasicMaterial color={'#ffff00'}/>
       </mesh>
+
+      {props.otherPlayers && props.otherPlayers.map((e, i) => <mesh 
+        ref={el => conesRef.current[i] = el} 
+        key={i}
+        position={[20, 0, 2.5]} 
+        rotation={[1.6, 0, 0]}>
+        <coneGeometry args={[1, 5, 32]}/>
+        <meshBasicMaterial color={'#ff9999'}/>
+      </mesh>)}
     </>
   )
 }

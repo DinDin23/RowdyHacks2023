@@ -45,7 +45,13 @@ io.on('connection', (socket) => {
   })
 
   socket.on("start-game", (data) => {
-    socket.to(data.lobby).emit("game-started")
+    socket.to(data.lobby).emit("game-started", {players: data.players})
+  })
+
+  socket.on("post-coords", (data) => {
+    const filteredData = {...data}
+    delete filteredData["lobby"]
+    socket.to(data.lobby).emit("coords-update", filteredData)
   })
 
   
