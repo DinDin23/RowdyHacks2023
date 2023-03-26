@@ -4,7 +4,7 @@ import axios from 'axios';
 
 export default function Login(props) {
   const [ user, setUser ] = useState([]);
-  const [ profile, setProfile ] = useState([]);
+  const [ profile, setProfile ] = useState({name: "", email: "", picture: null});
 
   const login = useGoogleLogin({
       onSuccess: (codeResponse) => setUser(codeResponse),
@@ -35,14 +35,21 @@ export default function Login(props) {
     [ user ]
   );
 
+  function joinLobby() {
+    props.setUsername(profile.name)
+    props.joinLobby(profile.name)
+    props.setPage("lobby")
+  }
+
+
   return (
     <div>
-      <input style={{width: 500}} value={props.username} onChange={(e) => props.setUsername(e.target.value)}></input>
-      <button onClick={props.joinLobby}>Join Lobby</button>
+      <input style={{width: 500}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
+      <button onClick={joinLobby}>Join Lobby</button>
       <h2>Google Login</h2>
       <br />
       <br />
-      {profile ? (
+      {profile.name.length > 0 ? (
           <div>
               <img src={profile.picture} alt="user image" />
               <p>Name: {profile.name}</p>

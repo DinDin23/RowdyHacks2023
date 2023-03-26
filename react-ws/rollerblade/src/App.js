@@ -49,14 +49,13 @@ function App() {
     }
   }, [])
 
-  function joinLobby() {
-    socket.emit("join-lobby", {lobby: "lobby", username: username})
-    setPage("lobby")
+  function joinLobby(chosenUsername) {
+    socket.emit("join-lobby", {lobby: "lobby", username: chosenUsername})
   }
 
   return (
     <div className="App">
-      {page === "login" ? <Login username={username} setUsername={setUsername} joinLobby={joinLobby}/>
+      {page === "login" ? <Login setUsername={setUsername} joinLobby={joinLobby} setPage={setPage}/>
        : page === "lobbyselector" ? <LobbySelector/>
        :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers}/>
        : page === "game" ? <Game/>
