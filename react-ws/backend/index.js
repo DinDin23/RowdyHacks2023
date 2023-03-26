@@ -44,6 +44,10 @@ io.on('connection', (socket) => {
     }
   })
 
+  socket.on("start-game", (data) => {
+    socket.to(data.lobby).emit("game-started")
+  })
+
   
 })
 
