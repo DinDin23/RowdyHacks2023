@@ -57,7 +57,7 @@ function App() {
     <div className="App">
       {page === "login" ? <Login setUsername={setUsername} joinLobby={joinLobby} setPage={setPage}/>
        : page === "lobbyselector" ? <LobbySelector/>
-       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers}/>
+       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage}/>
        : page === "game" ? <Game/>
        : page === "postgame" ? <PostGame/>
        : <div/>
