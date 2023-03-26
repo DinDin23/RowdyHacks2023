@@ -123,7 +123,7 @@ export default function CanvasContents(props) {
         key={i}
         position={[trackRadius, 0, 2.5]} 
         rotation={[1.6, 0, 0]}>
-        <coneGeometry args={[1, 5, 32]}/>
+        <Model/>
         <meshBasicMaterial color={'#ff9999'}/>
       </mesh>)}
     </>
