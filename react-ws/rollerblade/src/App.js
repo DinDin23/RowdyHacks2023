@@ -11,7 +11,9 @@ import PostGame from './pages/PostGame';
 
 const URL = 'http://localhost:4000';
 const socket = io(URL, {
-  autoConnect: false
+  autoConnect: false,
+  withCredentials: true,
+  transports: ["websocket"]
 });
 
 function App() {

@@ -58,16 +58,16 @@ export default function CanvasContents(props) {
   return (
     <>
       <mesh>
-        <torusGeometry args={[20, 7, 2, 100]} />
+        <torusGeometry args={[40, 11, 2, 100]} />
         <meshStandardMaterial />
       </mesh>
 
       <mesh position={[0, 0, .01]}>
-        <torusGeometry args={[20, 1, 2, 100]} />
+        <torusGeometry args={[40, 1, 2, 100]} />
         <meshBasicMaterial color={"#ff0000"} />
       </mesh>
       
-      <mesh ref={myMesh} position={[20, 0, 2.5]} rotation={[1.6, 0, 0]}>
+      <mesh ref={myMesh} position={[40, 0, 2.5]} rotation={[1.6, 0, 0]}>
         <coneGeometry args={[1, 5, 32]}/>
         <meshBasicMaterial color={'#ffff00'}/>
       </mesh>
@@ -75,7 +75,7 @@ export default function CanvasContents(props) {
       {props.otherPlayers && props.otherPlayers.map((e, i) => <mesh 
         ref={el => conesRef.current[i] = el} 
         key={i}
-        position={[20, 0, 2.5]} 
+        position={[40, 0, 2.5]} 
         rotation={[1.6, 0, 0]}>
         <coneGeometry args={[1, 5, 32]}/>
         <meshBasicMaterial color={'#ff9999'}/>
