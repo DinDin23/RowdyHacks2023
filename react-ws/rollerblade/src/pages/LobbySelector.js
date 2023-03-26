@@ -16,6 +16,7 @@ export default function LobbySelector(props) {
   return (
     <div className="flexColumn">
       <h2>Lobbies</h2>
+      <button onClick={props.fetchLobbies}>Refresh</button>
       {props.lobbies && props.lobbies.map((e, i) => <div key={i} className="lobby" onClick={() => selectLobby(e)}>
         <p>{e}</p>
       </div>)}

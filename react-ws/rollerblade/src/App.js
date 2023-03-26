@@ -41,10 +41,15 @@ function App() {
       setLobbies(data.list)
     }
 
+    function handleGameStarted() {
+      setPage("game")
+    }
+
     socket.on("joined-lobby", handleOtherUser)
     socket.on("existing-users", handleExistingUsers)
     socket.on("user-left", handleUserLeft)
     socket.on("lobby-info", handleLobbyList)
+    socket.on("game-started", handleGameStarted)
 
 
     return () => {
@@ -53,6 +58,7 @@ function App() {
       socket.off("existing-users", handleExistingUsers)
       socket.off("user-left", handleUserLeft)
       socket.off("lobby-info", handleLobbyList)
+      socket.off("game-started", handleGameStarted)
     }
   }, [])
 
@@ -70,12 +76,21 @@ function App() {
     setPage("lobbyselector")
   }
 
+  function startGame() {
+    socket.emit("start-game", {lobby: currentLobby})
+    setPage("game")
+  }
+
+  function sendCoords(x, y, orientation, velocity) {
+    socket.emit("post-coords", {username: username, x, y, orientation, velocity})
+  }
+
   return (
     <div className="App">
       {page === "login" ? <Login setUsername={setUsername} fetchLobbies={fetchLobbies} setPage={setPage}/>
-       : page === "lobbyselector" ? <LobbySelector joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
-       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage} leaveLobby={leaveLobby}/>
-       : page === "game" ? <Game/>
+       : page === "lobbyselector" ? <LobbySelector fetchLobbies={fetchLobbies} joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
+       :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage} leaveLobby={leaveLobby} startGame={startGame}/>
+       : page === "game" ? <Game sendCoords={sendCoords}/>
        : page === "postgame" ? <PostGame/>
        : <div/>
       }
