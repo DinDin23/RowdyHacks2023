@@ -1,11 +1,31 @@
 const { info } = require('console');
 const express = require('express');
+const dotenv = require('dotenv');
+const mongoose = require('mongoose');
 const app = express();
 const http = require('http').Server(app);
+const routes = require('./routes/routes');
 const io = require('socket.io')(http, {cors: {
   origin: "*",
 }});
+
+app.use('/api',routes);
+
 const port = process.env.PORT || 4000;
+
+dotenv.config();
+const mongoDBString = process.env.DATABASE_URL;
+mongoose.connect(mongoDBString);
+const database = mongoose.connection;
+
+database.on('error', (error) => {
+    console.log(error)
+})
+
+database.once('connected', () => {
+    console.log('Database Connected');
+})
+
 
 app.get("/", (req, res) => {
   res.send(`Status Ok: ${new Date()}`);
