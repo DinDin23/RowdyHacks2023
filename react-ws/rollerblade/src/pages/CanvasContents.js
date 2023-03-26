@@ -1,6 +1,7 @@
 import React, {useRef, useState, useEffect} from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
 import Model from './Model'
+import Model2 from './Model2'
 
 export default function CanvasContents(props) {
   const conesRef = useRef([])
@@ -121,10 +122,10 @@ export default function CanvasContents(props) {
       {props.otherPlayers && props.otherPlayers.map((e, i) => <mesh 
         ref={el => conesRef.current[i] = el} 
         key={i}
-        position={[trackRadius, 0, 2.5]} 
+        position={[trackRadius, 0, 0]} 
         rotation={[1.6, 0, 0]}>
-        <coneGeometry args={[1, 5, 32]}/>
-        <meshBasicMaterial color={'#ff9999'}/>
+        <Model2 />
+
       </mesh>)}
     </>
   )
