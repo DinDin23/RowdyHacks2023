@@ -1,5 +1,13 @@
 .App {
   text-align: center;
+  background: url("./newbg.jpeg");
+  background-repeat: no-repeat;
+  background-size: 125vw;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  justify-content: center;
+  align-items: center;
 }
 
 .App-logo {

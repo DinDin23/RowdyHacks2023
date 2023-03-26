@@ -1,0 +1,17 @@
+@font-face {
+    font-family: 'Press Start 2P';
+    src: url("../PressStart2P-Regular.ttf");
+}
+
+.logintext, p {
+    font-family: 'Press Start 2P', serif ;
+    font-size: 24px;
+    color:aliceblue;
+}
+
+h2 {
+    font-family: 'Press Start 2P', serif ;
+    font-weight: bold;
+    font-size: 64px;
+    color:aliceblue;
+}
