@@ -1,8 +1,14 @@
 .App {
   text-align: center;
+<<<<<<< HEAD
   background: url("./newbg.jpeg");
   background-repeat: no-repeat;
   background-size: 100vw 100vh;
+=======
+  background: url("./newbg.jpg");
+  background-repeat: no-repeat;
+  background-size: 125vw;
+>>>>>>> f80f1ce5 (login logout works)
   background-position: center;
   height: 100vh;
   display: flex;

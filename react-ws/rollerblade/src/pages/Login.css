@@ -3,6 +3,12 @@
     src: url("../PressStart2P-Regular.ttf");
 }
 
+<<<<<<< HEAD
+=======
+
+
+
+>>>>>>> f80f1ce5 (login logout works)
 .logintext, p {
     font-family: 'Press Start 2P', serif ;
     font-size: 24px;
