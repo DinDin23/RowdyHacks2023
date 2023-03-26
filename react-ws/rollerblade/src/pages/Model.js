@@ -1,10 +1,17 @@
-import React, { useRef } from "react";
+import React, { useRef, useEffect } from "react";
 import { useGLTF, useAnimations } from "@react-three/drei";
 
 export default function Model(props) {
   const group = useRef();
   const { nodes, materials, animations } = useGLTF("/rollerbladinggirl.gltf");
   const { actions } = useAnimations(animations, group);
+
+  useEffect(() => {
+    console.log(actions);
+    actions["Armature|mixamo.com|Layer0"].play();
+    actions["Armature.001|mixamo.com|Layer0"].play();
+  });
+
   return (
     <group ref={group} {...props} dispose={null}>
       <group name="Scene">
