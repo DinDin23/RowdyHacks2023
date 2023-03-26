@@ -97,3 +97,7 @@ button, input {
   padding: 10px;
   border-radius: 20px;
 }
+
+button {
+  justify-content: center;
+}

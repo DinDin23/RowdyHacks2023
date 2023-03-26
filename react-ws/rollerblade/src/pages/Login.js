@@ -2,6 +2,8 @@ import React, { useState, useEffect } from 'react';
 import { googleLogout, useGoogleLogin } from '@react-oauth/google';
 import axios from 'axios';
 import "./Login.css"
+import useSound from "use-sound"
+import mySound from "../retro.mp3"
 
 export default function Login(props) {
   const [ user, setUser ] = useState([]);
@@ -45,6 +47,16 @@ export default function Login(props) {
     }
   }
 
+  function MyButton(){
+    const [playSound] = useSound(mySound)
+    
+    return (
+      <button onClick={() => playSound()} >
+         Play Sound
+      </button>
+    )
+  }
+
 
   return (
     <div className="flexColumn" id='logintext'>
@@ -65,6 +77,7 @@ export default function Login(props) {
       ) : (
           <button onClick={() => login()}>Sign in with Google 🚀 </button>
       )}
+      {MyButton()}
     </div>
      
   )

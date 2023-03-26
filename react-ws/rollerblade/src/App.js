@@ -3,6 +3,7 @@ import {useEffect, useState} from "react"
 import './App.css';
 import { io } from "socket.io-client"
 
+
 import Lobby from './pages/Lobby';
 import Login from './pages/Login';
 import LobbySelector from './pages/LobbySelector';
@@ -133,6 +134,8 @@ function App() {
     console.log(laps)
     socket.emit("complete-lap", {lobby: currentLobby, laps})
   }
+
+
 
   return (
     <div className="App">
