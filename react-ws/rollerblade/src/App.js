@@ -9,7 +9,7 @@ import LobbySelector from './pages/LobbySelector';
 import Game from './pages/Game'
 import PostGame from './pages/PostGame';
 
-const URL = 'http://localhost:4000';
+const URL = '';
 const socket = io(URL, {
   autoConnect: false,
   withCredentials: true,

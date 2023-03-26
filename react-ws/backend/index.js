@@ -5,16 +5,14 @@ const http = require('http').Server(app);
 const io = require('socket.io')(http, {cors: {
   origin: "*",
 }});
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 
-app.get("/", (req, res) => {
-  res.send(`Status Ok: ${new Date()}`);
-});
+
 
 const rooms = io.of("/").adapter.rooms;
-const sids = io.of("/").adapter.sids;
+//const sids = io.of("/").adapter.sids;
 
-//app.use(express.static(__dirname + '/public'));
+app.use(express.static(__dirname + '/public'));
 
 
 io.on('connection', (socket) => {
