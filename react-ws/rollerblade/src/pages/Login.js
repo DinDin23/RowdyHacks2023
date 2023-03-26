@@ -38,23 +38,28 @@ export default function Login(props) {
   );
 
   function seeLobbies() {
-    props.setUsername(profile.name)
-    props.fetchLobbies()
-    props.setPage("lobbyselector")
+    if (profile.name && profile.name.length > 0) {
+      props.setUsername(profile.name)
+      props.fetchLobbies()
+      props.setPage("lobbyselector")
+    }
   }
 
 
   return (
     <div className="flexColumn" id='logintext'>
-      <input placeholder="username" style={{width: 500}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
-      <button onClick={seeLobbies}>See Lobbies</button>
+      
       <h2 style={{marginBottom: "1em", marginTop: "0.5em"}}>NeonBlader</h2>
+
+
+      <input placeholder="username" style={{width: 300}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
+      <button onClick={seeLobbies}>See Lobbies</button>
   
       {profile.name && profile.name.length > 0 ? (
-        <div>
-            <img src={profile.picture} alt="user image" />
+        <div style={{marginTop: 30}}>
+            {profile.picture && <img src={profile.picture} alt="user image" />}
             <p>Name: {profile.name}</p>
-            <p style={{marginBottom: "5em"}}>Email Address: {profile.email}</p>
+            {profile.email && <p style={{marginBottom: "5em"}}>Email Address: {profile.email}</p>}
             <button onClick={logOut}>Log out</button>
         </div>
       ) : (
