@@ -35,17 +35,17 @@ export default function Login(props) {
     [ user ]
   );
 
-  function joinLobby() {
+  function seeLobbies() {
     props.setUsername(profile.name)
-    props.joinLobby(profile.name)
-    props.setPage("lobby")
+    props.fetchLobbies()
+    props.setPage("lobbyselector")
   }
 
 
   return (
     <div>
       <input style={{width: 500}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
-      <button onClick={joinLobby}>Join Lobby</button>
+      <button onClick={seeLobbies}>See Lobbies</button>
       <h2>Google Login</h2>
       <br />
       <br />

@@ -25,11 +25,19 @@ io.on('connection', (socket) => {
     // tell the socket who all is in the lobby 
     const sockets = await io.in(data.lobby).fetchSockets();
     socket.emit("existing-users", {list: sockets.map(e => e.data.username)})
+    console.log(rooms)
+    console.log(sids)
   });
+
+  socket.on('get-all-lobbies', () => {
+    console.log(rooms)
+    socket.emit("lobby-info", {list: [...rooms.keys()]})
+  })
 
   socket.on("disconnect", () => {
     socket.to("lobby").emit("user-left", {username: socket.data.username})
   })
+
   
 })
 

@@ -15,6 +15,7 @@ const socket = io(URL, {
 });
 
 function App() {
+  const [lobbies, setLobbies] = useState([])
   const [lobbyUsers, setLobbyUsers] = useState([])
   const [username, setUsername] = useState("")
   const [page, setPage] = useState("login")
@@ -32,13 +33,17 @@ function App() {
     }
 
     function handleUserLeft(data) {
-      console.log(data)
       setLobbyUsers(prev => [...prev.filter(e => e !== data.username)])
+    }
+
+    function handleLobbyList(data) {
+      setLobbies(data.list)
     }
 
     socket.on("joined-lobby", handleOtherUser)
     socket.on("existing-users", handleExistingUsers)
     socket.on("user-left", handleUserLeft)
+    socket.on("lobby-info", handleLobbyList)
 
 
     return () => {
@@ -46,17 +51,22 @@ function App() {
       socket.off("joined-lobby", handleOtherUser)
       socket.off("existing-users", handleExistingUsers)
       socket.off("user-left", handleUserLeft)
+      socket.off("lobby-info", handleLobbyList)
     }
   }, [])
 
-  function joinLobby(chosenUsername) {
-    socket.emit("join-lobby", {lobby: "lobby", username: chosenUsername})
+  function fetchLobbies() {
+    socket.emit("get-all-lobbies")
+  }
+
+  function joinLobby(lobby) {
+    socket.emit("join-lobby", {lobby: lobby, username: username})
   }
 
   return (
     <div className="App">
-      {page === "login" ? <Login setUsername={setUsername} joinLobby={joinLobby} setPage={setPage}/>
-       : page === "lobbyselector" ? <LobbySelector/>
+      {page === "login" ? <Login setUsername={setUsername} fetchLobbies={fetchLobbies} setPage={setPage}/>
+       : page === "lobbyselector" ? <LobbySelector joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
        :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage}/>
        : page === "game" ? <Game/>
        : page === "postgame" ? <PostGame/>
