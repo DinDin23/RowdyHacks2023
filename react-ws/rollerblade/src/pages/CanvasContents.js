@@ -1,5 +1,6 @@
 import React, {useRef, useState, useEffect} from 'react'
 import { Canvas, useFrame, useThree } from '@react-three/fiber'
+import Model from './Model'
 
 export default function CanvasContents(props) {
   const conesRef = useRef([])
@@ -8,6 +9,7 @@ export default function CanvasContents(props) {
   const [coneOrientation, setConeOrientation] = useState(0)  
   const trackRadius = 100
   const trackThickness = 15
+  const [tilt, setTilt] = useState(0)
 
  
   useFrame(({ clock }) => {
@@ -30,8 +32,24 @@ export default function CanvasContents(props) {
       newConeOrientation -= .01
     }
 
+    let newTilt = tilt
+    if (props.dDown) {
+      newTilt += .001
+    } else if (props.aDown) {
+      newTilt -= .001
+    } else if (tilt != 0) {
+      tilt < 0 ? newTilt += 0.0001 : newTilt -= 0.0001
+    }
+
+    if (newTilt > 0.5) {
+      newTilt = 0.5
+    } else if (newTilt < -0.5) {
+      newTilt = -0.5
+    }
+    
     props.setConeVel(newConeVel)
     setConeOrientation(newConeOrientation)
+    setTilt(newTilt % 2)
 
     const oldAngle = Math.atan2(myMesh.current.position.y, myMesh.current.position.x)
 
@@ -85,19 +103,19 @@ export default function CanvasContents(props) {
 
   return (
     <>
+      <ambientLight />
       <mesh>
         <torusGeometry args={[trackRadius, trackThickness, 2, 100]} />
-        <meshStandardMaterial />
+        <meshStandardMaterial color={"#9D00FF"} />
       </mesh>
 
       <mesh position={[0, 0, .01]}>
         <torusGeometry args={[trackRadius, 1, 2, 100]} />
         <meshBasicMaterial color={"#ff0000"} />
       </mesh>
-      
-      <mesh ref={myMesh} position={[trackRadius, 0, 2.5]} rotation={[1.6, 0, 0]}>
-        <coneGeometry args={[1, 5, 32]}/>
-        <meshBasicMaterial color={'#ffff00'}/>
+
+      <mesh ref={myMesh} position={[trackRadius, 0, 0]} rotation={[Math.PI/2, coneOrientation + Math.PI, tilt]}>
+        <Model />
       </mesh>
 
       {props.otherPlayers && props.otherPlayers.map((e, i) => <mesh 

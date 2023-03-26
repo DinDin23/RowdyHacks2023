@@ -5,6 +5,8 @@ import CanvasContents from './CanvasContents';
 export default function Game(props) {
   const camRot = [1.6, 0, 0] 
 
+  const [aDown, setADown] = useState(false)
+  const [dDown, setDDown] = useState(false)
   const [sDown, setSDown] = useState(false)
   const [leftDown, setLeftDown] = useState(false)
   const [rightDown, setRightDown] = useState(false)
@@ -17,6 +19,14 @@ export default function Game(props) {
 
   useEffect(() => {
     function handleKeyDown(e) {
+      if (e.key === "a") {
+        setADown(true);
+      }
+
+      if (e.key === "d") {
+        setDDown(true);
+      }
+
       if (e.key === "s") {
         setSDown(true)
       }
@@ -28,6 +38,7 @@ export default function Game(props) {
       if (e.key === "ArrowRight") {
         setRightDown(true)
       }
+      
     }
 
     function handleKeyUp(e) {
@@ -37,6 +48,14 @@ export default function Game(props) {
           lastSkate.current = e.key
         }
       }
+      if (e.key === "a") {
+        setADown(false);
+      }
+
+      if (e.key === "d") {
+        setDDown(false);
+      }
+
       if (e.key === "s") {
         setSDown(false)
       }
@@ -69,6 +88,8 @@ export default function Game(props) {
       </div>
       <Canvas camera={{fov: 75, near: 0.1, far: 1000, position: [20, -5, 2.5], rotation: camRot}}>
         <CanvasContents 
+          aDown={aDown}
+          dDown={dDown}
           sDown={sDown}
           otherPlayers={props.otherPlayers}
           sendCoords={props.sendCoords}
