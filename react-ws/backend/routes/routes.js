@@ -1,19 +1,21 @@
 const express = require('express');
 const Model = require('../model/model');
 
+
 const router = express.Router()
 
 module.exports = router;
 
 //Post Method
 router.post('/post', async (req, res) => {
+    console.log(req.body)
     const data = new Model({
         name: req.body.name,
         email: req.body.email
     })
 
     try {
-        const dataToSave = data.save();
+        const dataToSave = await data.save();
         res.status(200).json(dataToSave)
     }
     catch (error) {

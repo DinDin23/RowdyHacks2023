@@ -8,8 +8,13 @@ const routes = require('./routes/routes');
 const io = require('socket.io')(http, {cors: {
   origin: "*",
 }});
+const bodyParser = require('body-parser');
 
+app.use(bodyParser.json());
+app.use(bodyParser.urlencoded({extended: false}));
 app.use('/api',routes);
+
+//app.use(express.json())
 
 const port = process.env.PORT || 4000;
 
