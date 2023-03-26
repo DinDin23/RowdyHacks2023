@@ -50,7 +50,7 @@ io.on('connection', (socket) => {
   })
 
   socket.on("complete-lap", (data) => {
-    if (data.laps >= 2) {
+    if (data.laps >= 5) {
       socket.to(data.lobby).emit("game-over", {winner: socket.data.username})
       socket.emit("game-over", {winner: socket.data.username})
       io.in(data.lobby).socketsLeave(data.lobby);

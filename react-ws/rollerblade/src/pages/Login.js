@@ -48,12 +48,15 @@ export default function Login(props) {
 
   return (
     <div className="flexColumn" id='logintext'>
+      
+      <h2 style={{marginBottom: "1em", marginTop: "0.5em"}}>NeonBlader</h2>
+
+
       <input placeholder="username" style={{width: 300}} value={profile.name} onChange={(e) => setProfile({...profile, name: e.target.value})}></input>
       <button onClick={seeLobbies}>See Lobbies</button>
-      <h2 style={{marginBottom: "1em", marginTop: "0.5em"}}>NeonBlader</h2>
   
       {profile.name && profile.name.length > 0 ? (
-        <div>
+        <div style={{marginTop: 30}}>
             {profile.picture && <img src={profile.picture} alt="user image" />}
             <p>Name: {profile.name}</p>
             {profile.email && <p style={{marginBottom: "5em"}}>Email Address: {profile.email}</p>}
