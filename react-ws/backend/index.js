@@ -38,11 +38,6 @@ io.on('connection', (socket) => {
     socket.emit("lobby-info", {list: [...rooms.keys()].filter(e => !socketIDs.includes(e))})
   })
 
-  socket.on("disconnect", () => {
-    for (const room in [...[...socket.rooms].filter(e => e !== socket.id)]) {
-      socket.to(room).emit("user-left", {username: socket.data.username})
-    }
-  })
 
   socket.on("start-game", (data) => {
     socket.to(data.lobby).emit("game-started", {players: data.players})
@@ -54,6 +49,22 @@ io.on('connection', (socket) => {
     socket.to(data.lobby).emit("coords-update", filteredData)
   })
 
+  socket.on("complete-lap", (data) => {
+    if (data.laps >= 2) {
+      socket.to(data.lobby).emit("game-over", {winner: socket.data.username})
+      socket.emit("game-over", {winner: socket.data.username})
+      io.in(data.lobby).socketsLeave(data.lobby);
+    }
+    else {
+      socket.to(data.lobby).emit("lap-completed", {username: socket.data.username, laps: data.laps})
+    }
+  })
+
+  socket.on("disconnect", () => {
+    for (const room in [...[...socket.rooms].filter(e => e !== socket.id)]) {
+      socket.to(room).emit("user-left", {username: socket.data.username})
+    }
+  })
   
 })
 

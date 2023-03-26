@@ -63,7 +63,10 @@ export default function Game(props) {
 
   return (
     <div id="canvas-container" style={{ width: "100vw", height: "100vh" }}>
-      <h3 style={{color: "white"}}>{laps}</h3>
+      <div className="lapInfo">
+        <h3>{laps}</h3>
+        {props.otherPlayers && props.otherPlayers.map((e, i) => <h3 key={i}>{e.username} {e.laps}</h3>)}
+      </div>
       <Canvas camera={{fov: 75, near: 0.1, far: 1000, position: [20, -5, 2.5], rotation: camRot}}>
         <CanvasContents 
           sDown={sDown}
@@ -75,6 +78,8 @@ export default function Game(props) {
           lastCheckpoint={lastCheckpoint}
           setLastCheckpoint={setLastCheckpoint}
           setLaps={setLaps}
+          laps={laps}
+          broadcastLap={props.broadcastLap}
         />
       </Canvas>
     </div>

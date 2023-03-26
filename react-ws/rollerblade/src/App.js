@@ -23,6 +23,7 @@ function App() {
   const [page, setPage] = useState("login")
   const [currentLobby, setCurrentLobby] = useState("")
   const [otherPlayers, setOtherPlayers] = useState([])
+  const [winner, setWinner] = useState("")
 
 
   useEffect(() => {
@@ -45,7 +46,7 @@ function App() {
     }
 
     function handleGameStarted(data) {
-      setOtherPlayers([...data.players.map(e => ({username: e}))])
+      setOtherPlayers([...data.players.map(e => ({username: e, laps: 0}))])
       setPage("game")
     }
 
@@ -54,11 +55,32 @@ function App() {
         const index = prev.findIndex(e => e.username === data.username)
         if (index > -1) {
           let newArr = [...prev]
-          newArr[index] = {...data}
+          newArr[index] = {...newArr[index], ...data}
           return newArr
         }
         return prev
       })
+    }
+
+    function handleCompletedLap(data) {
+      setOtherPlayers(prev => {
+        const index = prev.findIndex(e => e.username === data.username)
+        if (index > -1) {
+          let newArr = [...prev]
+          newArr[index] = {...newArr[index], laps: data.laps}
+          return newArr
+        }
+        return prev
+      })
+    }
+
+    function handleGameOver(data) {
+      setWinner(data.winner)
+      setPage("postgame")
+      setLobbyUsers([])
+      setOtherPlayers([])
+      setCurrentLobby("")
+      setLobbies([])
     }
 
     socket.on("joined-lobby", handleOtherUser)
@@ -67,7 +89,8 @@ function App() {
     socket.on("lobby-info", handleLobbyList)
     socket.on("game-started", handleGameStarted)
     socket.on("coords-update", handleCoordsUpdate)
-
+    socket.on("lap-completed", handleCompletedLap)
+    socket.on("game-over", handleGameOver)
 
     return () => {
       socket.disconnect()
@@ -77,6 +100,8 @@ function App() {
       socket.off("lobby-info", handleLobbyList)
       socket.off("game-started", handleGameStarted)
       socket.off("coords-update", handleCoordsUpdate)
+      socket.off("lap-completed", handleCompletedLap)
+      socket.off("game-over", handleGameOver)
     }
   }, [])
 
@@ -96,7 +121,7 @@ function App() {
 
   function startGame() {
     socket.emit("start-game", {lobby: currentLobby, players: [...lobbyUsers]})
-    setOtherPlayers([...lobbyUsers.map(e => ({username: e}))])
+    setOtherPlayers([...lobbyUsers.map(e => ({username: e, laps: 0}))])
     setPage("game")
   }
 
@@ -104,13 +129,18 @@ function App() {
     socket.emit("post-coords", {lobby: currentLobby, username, x, y, orientation, velocity})
   }
 
+  function broadcastLap(laps) {
+    console.log(laps)
+    socket.emit("complete-lap", {lobby: currentLobby, laps})
+  }
+
   return (
     <div className="App">
       {page === "login" ? <Login setUsername={setUsername} fetchLobbies={fetchLobbies} setPage={setPage}/>
        : page === "lobbyselector" ? <LobbySelector fetchLobbies={fetchLobbies} joinLobby={joinLobby} lobbies={lobbies} setLobbies={setLobbies} setPage={setPage}/>
        :  page === "lobby" ? <Lobby lobbyUsers={lobbyUsers} setPage={setPage} leaveLobby={leaveLobby} startGame={startGame}/>
-       : page === "game" ? <Game sendCoords={sendCoords} otherPlayers={[...otherPlayers.filter(e => e.username !== username)]}/>
-       : page === "postgame" ? <PostGame/>
+       : page === "game" ? <Game sendCoords={sendCoords} otherPlayers={[...otherPlayers.filter(e => e.username !== username)]} broadcastLap={broadcastLap}/>
+       : page === "postgame" ? <PostGame winner={winner} setPage={setPage}/>
        : <div/>
       }
     </div>

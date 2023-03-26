@@ -50,14 +50,18 @@ export default function CanvasContents(props) {
       myMesh.current.position.y = newY
     }
 
-    const newAngle = Math.atan2(myMesh.current.position.y, myMesh.current.position.x) + Math.PI
+    let newAngle = Math.atan2(myMesh.current.position.y, myMesh.current.position.x) 
+    newAngle = (newAngle >= 0 ? newAngle : 2*Math.PI + newAngle)
 
     const oldCheckpoint = props.lastCheckpoint
     const newCheckpoint = Math.floor(newAngle/(Math.PI/2))
     if (newCheckpoint - oldCheckpoint === 1 || (oldCheckpoint === 3 && newCheckpoint === 0)) {
       props.setLastCheckpoint(newCheckpoint)
       if (oldCheckpoint === 3 && newCheckpoint === 0) {
-        props.setLaps(prev => prev + 1)
+        const newLapCount = props.laps + 1
+        props.setLaps(newLapCount)
+        props.broadcastLap(newLapCount)
+
       }
     }
 

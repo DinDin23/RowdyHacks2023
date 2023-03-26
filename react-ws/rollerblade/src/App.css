@@ -75,3 +75,13 @@
   margin-block-end: 0;
   margin-bottom: 0.5em;
 }
+
+.lapInfo {
+  position: absolute;
+    top: 10px;
+    width: 100%;
+    text-align: center;
+    z-index: 100;
+    display:block;
+  color: white;
+}
