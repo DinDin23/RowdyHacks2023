@@ -1,12 +1,24 @@
 const express = require('express');
+const Model = require('../model/model');
 
 const router = express.Router()
 
 module.exports = router;
 
 //Post Method
-router.post('/post', (req, res) => {
-    res.send('Post API')
+router.post('/post', async (req, res) => {
+    const data = new Model({
+        name: req.body.name,
+        email: req.body.email
+    })
+
+    try {
+        const dataToSave = data.save();
+        res.status(200).json(dataToSave)
+    }
+    catch (error) {
+        res.status(400).json({message: error.message})
+    }
 })
 
 //Get all Method
