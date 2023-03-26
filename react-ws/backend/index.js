@@ -7,6 +7,7 @@ const routes = require('./routes/routes');
 const io = require('socket.io')(http, {cors: {
   origin: "*",
 }});
+
 const bodyParser = require('body-parser');
 
 app.use(bodyParser.json());
@@ -14,7 +15,7 @@ app.use(bodyParser.urlencoded({extended: false}));
 app.use('/api',routes);
 
 
-const port = process.env.PORT || 4000;
+const port = process.env.PORT || 3000;
 
 dotenv.config();
 const mongoDBString = process.env.DATABASE_URL;
