@@ -9,8 +9,6 @@ import LobbySelector from './pages/LobbySelector';
 import Game from './pages/Game'
 import PostGame from './pages/PostGame';
 
-import { GoogleLogin } from '@react-oauth/google';
-
 const URL = 'http://localhost:4000';
 const socket = io(URL, {
   autoConnect: false
@@ -56,14 +54,6 @@ function App() {
     setPage("lobby")
   }
 
-  const responseMessage = (response) => {
-    console.log(response);
-  };
-  
-  const errorMessage = (error) => {
-    console.log(error);
-  };
-
   return (
     <div className="App">
       {page === "login" ? <Login username={username} setUsername={setUsername} joinLobby={joinLobby}/>
@@ -73,12 +63,6 @@ function App() {
        : page === "postgame" ? <PostGame/>
        : <div/>
       }
-      <div>
-        <h2>React Google Login</h2>
-        <br />
-        <br />
-        <GoogleLogin onSuccess={responseMessage} onError={errorMessage} />
-      </div>
     </div>
   );
 }
